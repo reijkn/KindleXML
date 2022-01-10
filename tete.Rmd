@@ -1,0 +1,50 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(xml2)
+```
+
+
+やるか～～
+```{r}
+a <- xml2::read_xml("KindleSyncMetadataCache.xml")
+```
+
+```{r}
+a[[2]]
+```
+
+```{r}
+a2 <- a[[1]]
+```
+
+```{r}
+nodes <- xml_child(a, 3) %>%
+  as_list()
+```
+
+```{r}
+nodes[[1]]$ASIN[[1]]
+```
+
+```{r}
+ASIN <- map_chr(nodes, ~.$ASIN[[1]])
+```
+
+```{r}
+title <- map_chr(nodes, ~.$title[[1]])
+```
+
+```{r}
+nodes[[1]]$title[[1]]
+```
+
+```{r}
+data.frame(ASIN, title) %>%
+  mutate(down = str_c("http://qnrp:5000/dav/Download/", ASIN, "_EBOK/", ASIN, "_EBOK.azw"))
+```
+
