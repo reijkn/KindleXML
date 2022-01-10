@@ -14,35 +14,29 @@ library(xml2)
 a <- xml2::read_xml("KindleSyncMetadataCache.xml")
 ```
 
-```{r}
-a[[2]]
-```
 
-```{r}
-a2 <- a[[1]]
-```
-
+3ツメ？をリストにするみたいな？？
 ```{r}
 nodes <- xml_child(a, 3) %>%
   as_list()
 ```
 
-```{r}
-nodes[[1]]$ASIN[[1]]
-```
-
+ASINだけ抜き出すにはmapであれする。
 ```{r}
 ASIN <- map_chr(nodes, ~.$ASIN[[1]])
 ```
 
+Titleだけ抜き出すのも、同様の操作。
 ```{r}
 title <- map_chr(nodes, ~.$title[[1]])
 ```
 
+リストにリストがみたいな？？？？
 ```{r}
 nodes[[1]]$title[[1]]
 ```
 
+最終的にデータフレームにするのはこうだけど、、出力してないならつかってないのかも？
 ```{r}
 data.frame(ASIN, title) %>%
   mutate(down = str_c("http://qnrp:5000/dav/Download/", ASIN, "_EBOK/", ASIN, "_EBOK.azw"))
